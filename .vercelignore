@@ -1,0 +1,8 @@
+# Deploy only the showroom SPA from the repository root.
+# The bundled backend is a separate app and is not part of this deployment.
+backend/
+the-bike-yard-*.zip
+.env
+.env.local
+.env.test
+.aistudio/

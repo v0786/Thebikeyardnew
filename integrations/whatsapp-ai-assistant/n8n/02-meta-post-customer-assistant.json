@@ -1,0 +1,504 @@
+{
+  "name": "The Bike Yard - WhatsApp Customer Assistant (TEST MVP)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-inbound",
+        "responseMode": "onReceived",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "id": "tby-post-webhook",
+      "name": "Meta POST Inbound",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        200,
+        400
+      ],
+      "webhookId": "tby-post-inbound"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse only supported text messages. Webhook is acknowledged immediately.\n// Fail closed unless the configured sender ID is the Meta TEST phone-number ID.\nconst mode = $env.WHATSAPP_MODE || 'test';\nconst approved = ($env.WHATSAPP_PRODUCTION_APPROVED || 'false').toLowerCase() === 'true';\nconst senderId = $env.WHATSAPP_PHONE_NUMBER_ID || '';\nconst testId = $env.WHATSAPP_TEST_PHONE_NUMBER_ID || '';\nif (mode !== 'test' || !testId || senderId !== testId) return [];\nconst body = $json.body ?? $json;\nif (body.object !== 'whatsapp_business_account') return [];\nconst out = [];\nfor (const entry of body.entry ?? []) for (const change of entry.changes ?? []) {\n  const value = change.value ?? {};\n  for (const m of value.messages ?? []) {\n    if (m.type !== 'text' || !m.text?.body || !m.id || !m.from) continue;\n    const text = String(m.text.body).trim().slice(0, 2000);\n    const low = text.toLowerCase();\n    const optOut = /^(stop|unsubscribe|cancel|opt\\\\s*out|band\\\\s*karo|message\\\\s*mat\\\\s*karo|mat\\\\s*bhejo|बंद\\\\s*करो|मैसेज\\\\s*मत\\\\s*करो)$/i.test(low);\n    const human = /(talk to human|human agent|real person|staff se baat|insaan se baat|sales executive|representative)/i.test(low);\n    let intent = 'ENQUIRY';\n    if (optOut) intent = 'OPT_OUT';\n    else if (human) intent = 'HUMAN_REQUEST';\n    else if (/(test.?ride|test drive|टेस्ट राइड)/i.test(low)) intent = 'TEST_RIDE';\n    else if (/(callback|call back|call me|फोन|कॉल)/i.test(low)) intent = 'CALLBACK';\n    else if (/(emi|finance|loan|down payment|डाउन पेमेंट)/i.test(low)) intent = 'FINANCE';\n    else if (/(price|on.?road|kitne|कीमत|दाम)/i.test(low)) intent = 'PRICE';\n    out.push({json:{messageId:m.id,waId:m.from,text,intent,displayName:value.contacts?.[0]?.profile?.name || ''}});\n  }\n}\nreturn out;"
+      },
+      "id": "tby-post-parse",
+      "name": "Parse Text + Test Guard + Intent",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        440,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO processed_messages(message_id,wa_id) VALUES ($1,$2) ON CONFLICT (message_id) DO NOTHING RETURNING message_id;",
+        "options": {
+          "queryReplacement": "={{ [$json.messageId, $json.waId] }}"
+        }
+      },
+      "id": "tby-post-dedup",
+      "name": "Claim WAMID (Postgres)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        700,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO wa_conversations(wa_id,last_message_at) VALUES ($1,NOW()) ON CONFLICT (wa_id) DO UPDATE SET last_message_at=NOW(),updated_at=NOW() RETURNING wa_id,mode;",
+        "options": {
+          "queryReplacement": "={{ [$('Parse Text + Test Guard + Intent').item.json.waId] }}"
+        }
+      },
+      "id": "tby-post-conversation",
+      "name": "Load or Create Conversation",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        940,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const p = $('Parse Text + Test Guard + Intent').item.json; const mode = $json.mode || 'ACTIVE'; if (p.intent === 'OPT_OUT') return [{json:{...p,route:'OPT_OUT'}}]; if (mode === 'OPTED_OUT') return [{json:{...p,route:'SUPPRESS'}}]; if (mode === 'HUMAN_TAKEOVER' || p.intent === 'HUMAN_REQUEST') return [{json:{...p,route:'HUMAN'}}]; return [{json:{...p,route:'AI'}}];"
+      },
+      "id": "tby-post-policy",
+      "name": "Conversation Policy Router",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1180,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "OPT_OUT",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "HUMAN",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "SUPPRESS",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "tby-post-switch",
+      "name": "Route Opt-out / Human / AI",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        1420,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE wa_conversations SET mode='OPTED_OUT',opted_out_at=NOW(),updated_at=NOW() WHERE wa_id=$1;",
+        "options": {
+          "queryReplacement": "={{ [$json.waId] }}"
+        }
+      },
+      "id": "tby-post-optout-db",
+      "name": "Persist Opt-out",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1660,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/{{$env.WHATSAPP_API_VERSION || 'v21.0'}}/{{$env.WHATSAPP_PHONE_NUMBER_ID}}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$env.WHATSAPP_ACCESS_TOKEN}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {messaging_product:'whatsapp',to:$('Conversation Policy Router').item.json.waId,type:'text',text:{preview_url:false,body:'You have been opted out of automated messages from The Bike Yard. We will not send further automated messages.'}} }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "tby-post-optout-send",
+      "name": "Send Opt-out Confirmation",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1900,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH upd AS (UPDATE wa_conversations SET mode='HUMAN_TAKEOVER',updated_at=NOW() WHERE wa_id=$1 RETURNING wa_id), lead AS (INSERT INTO wa_leads(wa_id,intent,customer_message_id,status,notes) SELECT wa_id,$2,$3,'CONFIRM_WITH_STAFF','Human handover requested; staff must respond' FROM upd RETURNING wa_id) INSERT INTO wa_messages(message_id,wa_id,direction,message_type,intent,status,body_text) SELECT $3,wa_id,'IN','text',$2,'STORED_FOR_STAFF',$4 FROM lead;",
+        "options": {
+          "queryReplacement": "={{ [$json.waId,$json.intent,$json.messageId,$json.text] }}"
+        }
+      },
+      "id": "tby-post-human-db",
+      "name": "Store Human Handover",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1660,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH lead AS (INSERT INTO wa_leads(wa_id,intent,customer_message_id,status,notes) VALUES ($1,$2,$3,'CONFIRM_WITH_STAFF','Captured by assistant; showroom staff must confirm') RETURNING wa_id) INSERT INTO wa_messages(message_id,wa_id,direction,message_type,intent,status) SELECT $3,$1,'IN','text',$2,'RECEIVED' FROM lead;",
+        "options": {
+          "queryReplacement": "={{ [$json.waId,$json.intent,$json.messageId] }}"
+        }
+      },
+      "id": "tby-post-lead-db",
+      "name": "Capture Lead (AI Route)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1660,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const p = $('Conversation Policy Router').item.json;\nconst facts = {\n  dealershipName: $env.DEALERSHIP_NAME || 'The Bike Yard',\n  location: $env.DEALERSHIP_LOCATION || 'Thane, Maharashtra (MH-04)',\n  address: $env.DEALERSHIP_ADDRESS || null,\n  hours: $env.DEALERSHIP_HOURS || null,\n  phone: $env.DEALERSHIP_PHONE || null,\n  brandsNote: $env.DEALERSHIP_BRANDS_NOTE || null\n};\nconst system = 'You are an automated virtual assistant for ' + facts.dealershipName + '. Match the customer language (Hinglish, Hindi, English). Keep replies short and warm. VERIFIED KNOWLEDGE ONLY: ' + JSON.stringify(facts) + '. Never invent stock, price, on-road quote, discounts, specifications, delivery, finance approval or availability. If unknown, say staff must confirm and offer callback. Test rides/callbacks are requests, never confirmed. EMI is only an estimate with explicit rate, tenure and down-payment assumptions; if assumptions are missing, do not calculate. Escalate complaints, negotiation, finance eligibility, payment issues, uncertain facts and human requests. Never impersonate a human. Return only reply text.';\nreturn [{json:{waId:p.waId,intent:p.intent,messageId:p.messageId,system,userText:p.text}}];"
+      },
+      "id": "tby-post-ai-prompt",
+      "name": "Build Grounded AI Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1900,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.AI_API_URL || 'https://api.openai.com/v1/chat/completions' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$env.AI_API_KEY}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {model:$env.AI_MODEL || 'gpt-4o-mini',temperature:0.2,max_tokens:180,messages:[{role:'system',content:$json.system},{role:'user',content:$json.userText}]} }}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "tby-post-ai",
+      "name": "Generate AI Reply",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2140,
+        600
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const req = $('Build Grounded AI Prompt').item.json; const content = $json.choices?.[0]?.message?.content; const reply = typeof content === 'string' && content.trim() ? content.trim().slice(0,1200) : 'Thanks for contacting The Bike Yard. I cannot verify that detail right now. Our showroom team will need to confirm it. Would you like a callback?'; return [{json:{waId:req.waId,intent:req.intent,reply}}];"
+      },
+      "id": "tby-post-fallback",
+      "name": "Extract Reply or Safe Fallback",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2380,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/{{$env.WHATSAPP_API_VERSION || 'v21.0'}}/{{$env.WHATSAPP_PHONE_NUMBER_ID}}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$env.WHATSAPP_ACCESS_TOKEN}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ {messaging_product:'whatsapp',to:$json.waId,type:'text',text:{preview_url:false,body:$json.reply}} }}",
+        "options": {
+          "timeout": 15000
+        }
+      },
+      "id": "tby-post-send",
+      "name": "Send WhatsApp Reply",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2620,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "content": "TEST ONLY. This is a standalone alternative to the existing backend WhatsApp webhook. Do not activate both against the same Meta callback. The current backend already validates Meta signatures and owns conversation processing. Configure PostgreSQL + HTTP credentials/environment before testing. HMAC signature validation must happen at a trusted gateway before this workflow.",
+        "height": 220,
+        "width": 560
+      },
+      "id": "tby-post-note",
+      "name": "Read Me - Critical Safety",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        180,
+        80
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "tby-post-suppress",
+      "name": "Acknowledge Suppressed",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1660,
+        900
+      ]
+    }
+  ],
+  "connections": {
+    "Meta POST Inbound": {
+      "main": [
+        [
+          {
+            "node": "Parse Text + Test Guard + Intent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Text + Test Guard + Intent": {
+      "main": [
+        [
+          {
+            "node": "Claim WAMID (Postgres)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claim WAMID (Postgres)": {
+      "main": [
+        [
+          {
+            "node": "Load or Create Conversation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load or Create Conversation": {
+      "main": [
+        [
+          {
+            "node": "Conversation Policy Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversation Policy Router": {
+      "main": [
+        [
+          {
+            "node": "Route Opt-out / Human / AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Opt-out / Human / AI": {
+      "main": [
+        [
+          {
+            "node": "Persist Opt-out",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Store Human Handover",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Acknowledge Suppressed",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Capture Lead (AI Route)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Persist Opt-out": {
+      "main": [
+        [
+          {
+            "node": "Send Opt-out Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Capture Lead (AI Route)": {
+      "main": [
+        [
+          {
+            "node": "Build Grounded AI Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Grounded AI Prompt": {
+      "main": [
+        [
+          {
+            "node": "Generate AI Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate AI Reply": {
+      "main": [
+        [
+          {
+            "node": "Extract Reply or Safe Fallback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Reply or Safe Fallback": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "tby-post-v1",
+  "tags": []
+}

@@ -1,0 +1,105 @@
+{
+  "name": "The Bike Yard - Meta GET Verification (TEST ONLY)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "whatsapp-verify",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "tby-get-webhook",
+      "name": "Meta GET Verification",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "webhookId": "tby-get-verify"
+    },
+    {
+      "parameters": {
+        "jsCode": "const q = $json.query ?? {}; const expected = $env.WHATSAPP_VERIFY_TOKEN || ''; const mode = q['hub.mode']; const token = q['hub.verify_token']; const challenge = q['hub.challenge']; if (!expected) return [{json:{statusCode:503,body:'Verification is not configured.'}}]; if (mode === 'subscribe' && token === expected && typeof challenge === 'string') return [{json:{statusCode:200,body:challenge}}]; return [{json:{statusCode:403,body:'Forbidden'}}];"
+      },
+      "id": "tby-get-check",
+      "name": "Check Verify Token",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.body }}",
+        "options": {
+          "responseCode": "={{ $json.statusCode }}",
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/plain; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "id": "tby-get-response",
+      "name": "Return Challenge or Forbidden",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "content": "GET verification endpoint. Requires WHATSAPP_VERIFY_TOKEN. Keep this workflow inactive until the public HTTPS dispatcher is configured. TEST NUMBER ONLY.",
+        "height": 140,
+        "width": 440
+      },
+      "id": "tby-get-note",
+      "name": "Read Me - Test Only",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        200,
+        80
+      ]
+    }
+  ],
+  "connections": {
+    "Meta GET Verification": {
+      "main": [
+        [
+          {
+            "node": "Check Verify Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Verify Token": {
+      "main": [
+        [
+          {
+            "node": "Return Challenge or Forbidden",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "tby-get-v1",
+  "tags": []
+}

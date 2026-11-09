@@ -1,0 +1,54 @@
+.yard-stage {
+  background: radial-gradient(ellipse at 56% 42%, color-mix(in srgb, var(--stage-tint) 16%, #0d0d10), #0a0a0d 70%);
+  color: #f8f7f7;
+  border-bottom: 1px solid #ffffff22;
+  overflow: hidden;
+}
+.yard-stage-inner { max-width: 1440px; margin-inline: auto; padding: 0 clamp(1rem, 4vw, 4rem); }
+.yard-stage-top, .yard-stage-meta { display: flex; justify-content: space-between; gap: .65rem 1rem; flex-wrap: wrap; padding-block: .9rem; color: #b5b2ba; font: 600 .65rem/1.5 var(--font-mono); letter-spacing: .14em; }
+.yard-stage-top { border-bottom: 1px solid #ffffff20; }
+.yard-stage-top i, .yard-stage-caption i { display: inline-block; width: .45rem; height: .45rem; margin-right: .35rem; border-radius: 100%; background: var(--stage-tint); box-shadow: 0 0 15px var(--stage-tint); }
+.yard-stage-main { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.1fr) minmax(0, .7fr); align-items: center; gap: clamp(1rem, 2vw, 2.25rem); padding-block: clamp(1.25rem, 4vw, 4rem); }
+.yard-stage-kicker { color: var(--stage-tint); font: 700 .67rem/1.5 var(--font-mono); letter-spacing: .15em; }
+.yard-stage-copy h1 { margin: .65rem 0 1rem; font-size: clamp(3rem, 5.5vw, 6.1rem); font-weight: 900; line-height: .88; letter-spacing: -.085em; }
+.yard-stage-copy h1 em { color: var(--stage-tint); font-style: normal; }
+.yard-stage-intro { max-width: 27ch; font-size: .9rem; line-height: 1.65; color: #c9c6ce; }
+.yard-stage-cta { display: inline-flex; align-items: center; gap: .65rem; min-height: 44px; margin-top: 1.25rem; padding: .65rem .95rem; border-radius: .35rem; color: #0e090b; background: var(--stage-tint); font-weight: 850; font-size: .78rem; }
+.yard-stage-cta:hover { filter: brightness(1.12); }
+.yard-stage-media { position: relative; min-width: 0; animation: yard-stage-reveal .55s ease-out both; }
+.yard-stage-photo { position: relative; isolation: isolate; overflow: hidden; border-radius: .75rem; background: #111014; box-shadow: 0 0 54px -22px var(--stage-tint); }
+.yard-stage-photo::after { position: absolute; inset: 0; content: ''; background: linear-gradient(160deg, color-mix(in srgb, var(--stage-tint) 28%, transparent), transparent 56%); mix-blend-mode: screen; pointer-events: none; }
+.yard-stage-photo img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: contain; }
+.yard-stage-caption { position: absolute; left: .7rem; bottom: .65rem; padding: .3rem .5rem; border: 1px solid #ffffff2b; border-radius: .2rem; background: #0a090ce8; color: #fff; font: 600 .62rem/1.4 var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
+.yard-stage-model { margin: .5rem 0 .85rem; color: #c9c6ce; font-size: .83rem; }
+.yard-stage-model strong { display: block; color: #fff; font-size: clamp(1.25rem, 2.1vw, 2rem); line-height: 1.05; letter-spacing: -.045em; }
+.yard-stage-spec dl { display: grid; gap: .45rem; }
+.yard-stage-spec dl div { border-top: 1px solid #ffffff24; padding-top: .38rem; }
+.yard-stage-spec dt { color: #b5b2ba; font-size: .67rem; }
+.yard-stage-spec dd { font-size: .89rem; font-weight: 750; }
+.yard-stage-link { display: inline-flex; gap: .35rem; align-items: center; color: var(--stage-tint); padding-block: .6rem; font-size: .77rem; font-weight: 750; }
+.yard-stage-footer { display: flex; justify-content: space-between; align-items: center; gap: .65rem; flex-wrap: wrap; border-block: 1px solid #ffffff20; padding: .65rem 0; }
+.yard-stage-selector, .yard-stage-actions { display: flex; gap: .35rem; align-items: center; }
+.yard-stage-selector { min-width: 0; max-width: 100%; }
+.yard-stage-options { display: flex; gap: .35rem; min-width: 0; overflow-x: auto; }
+.yard-stage-selector button, .yard-stage-actions button, .yard-stage-actions a { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; gap: .4rem; min-height: 44px; padding: .35rem .65rem; border: 1px solid #ffffff26; border-radius: .35rem; color: #f2eff4; font-size: .73rem; font-weight: 750; }
+.yard-stage-selector button[aria-pressed="true"], .yard-stage-selector button:hover, .yard-stage-actions :is(button,a):hover { border-color: var(--stage-tint); color: var(--stage-tint); }
+.yard-stage-options small { color: #b5b2ba; font: 650 .62rem var(--font-mono); }
+.yard-stage-actions { flex-wrap: wrap; }
+.yard-stage-actions a { min-width: 44px; }
+.yard-stage :is(a,button):focus-visible { outline: 2px solid var(--stage-tint); outline-offset: 2px; }
+@keyframes yard-stage-reveal { from { opacity: .5; transform: translateX(12px); } to { opacity: 1; transform: none; } }
+@media (max-width: 1050px) {
+  .yard-stage-main { grid-template-columns: minmax(0, .9fr) minmax(0, 1.35fr); }
+  .yard-stage-spec { grid-column: 1 / -1; }
+  .yard-stage-spec dl { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .yard-stage-main { grid-template-columns: minmax(0, 1fr); }
+  .yard-stage-intro { max-width: 42ch; }
+  .yard-stage-photo img { aspect-ratio: 3 / 2; }
+  .yard-stage-selector { width: 100%; }
+  .yard-stage-options { flex: 1; }
+  .yard-stage-options button { flex: 1 0 auto; }
+}
+@media (prefers-reduced-motion: reduce) { .yard-stage-media { animation: none; } }

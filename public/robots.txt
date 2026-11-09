@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /staff
+Disallow: /login
+Disallow: /*?*utm_
+
+Sitemap: https://the-bike-yard.vercel.app/sitemap.xml

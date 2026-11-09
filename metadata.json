@@ -1,0 +1,6 @@
+{
+  "name": "The Bike Yard — Motorcycle Dealership Platform",
+  "description": "Premium motorcycle dealership, digital showroom, admin management, staff operations, and complete Next.js 16 + Prisma source code export for The Bike Yard in Khopat, Thane, Maharashtra.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

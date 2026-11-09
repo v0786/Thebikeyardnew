@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Bike Yard — Theme Options</title>
+<style>
+  :root { --radius: 14px; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background: #111; color: #eee; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 28px 20px 48px; }
+  h1 { margin: 0 0 6px; font-size: 28px; letter-spacing: -0.02em; }
+  .sub { margin: 0 0 22px; color: #a1a1aa; font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 18px; }
+  .theme { border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); box-shadow: 0 18px 50px rgba(0,0,0,.35); }
+  .theme-head { padding: 14px 16px 10px; display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .theme-head h2 { margin: 0; font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
+  .tag { font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 999px; border: 1px solid rgba(255,255,255,.12); white-space: nowrap; }
+  .swatches { display: flex; gap: 8px; padding: 0 16px 12px; flex-wrap: wrap; }
+  .sw { display: flex; align-items: center; gap: 6px; font-size: 10px; font-family: ui-monospace, SFMono-Regular, monospace; opacity: .92; }
+  .dot { width: 18px; height: 18px; border-radius: 6px; border: 1px solid rgba(255,255,255,.18); flex: 0 0 auto; }
+  .mock { margin: 0 12px 12px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; font-size: 11px; font-weight: 700; }
+  .nav .brand { display: flex; align-items: center; gap: 8px; }
+  .logo { width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; font-size: 11px; }
+  .navlinks { display: flex; gap: 10px; font-weight: 600; font-size: 10px; opacity: .9; }
+  .hero { padding: 16px 14px 14px; position: relative; }
+  .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0,0,0,.55), rgba(0,0,0,.05)); pointer-events: none; }
+  .hero-inner { position: relative; z-index: 1; }
+  .eyebrow { font-size: 9px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+  .hero h3 { margin: 6px 0 4px; font-size: 22px; line-height: 1.05; letter-spacing: -0.03em; }
+  .hero p { margin: 0 0 10px; font-size: 11px; line-height: 1.35; max-width: 280px; opacity: .9; }
+  .btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { font-size: 10px; font-weight: 800; padding: 8px 11px; border-radius: 10px; border: 1px solid transparent; }
+  .btn.ghost { background: transparent; }
+  .cards { display: grid; grid-template-columns: 1.2fr 1fr; gap: 8px; padding: 10px 12px 12px; }
+  .card { border-radius: 12px; padding: 10px; border: 1px solid rgba(255,255,255,.06); }
+  .bike { display: flex; gap: 10px; align-items: center; }
+  .imgph { width: 74px; height: 54px; border-radius: 10px; flex: 0 0 auto; display: grid; place-items: center; font-size: 9px; font-weight: 700; }
+  .bmeta .m { font-size: 11px; font-weight: 800; }
+  .bmeta .s { font-size: 9px; opacity: .75; margin-top: 1px; }
+  .price { margin-top: 6px; font-size: 14px; font-weight: 900; letter-spacing: -0.01em; }
+  .price small { font-size: 9px; font-weight: 600; opacity: .7; }
+  .specs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 9px; }
+  .spec { border-radius: 9px; padding: 7px 8px; }
+  .spec b { display: block; font-size: 10px; margin-top: 1px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>The Bike Yard — Theme Options</h1>
+  <p class="sub">5 showroom directions (mock UI: nav, hero, bike card, price & CTAs). Pick a number/name and I’ll apply it to the live site (and can add a light/dark switcher).</p>
+  <div class="grid">
+
+    <!-- 1 Obsidian Gold -->
+    <section class="theme" style="background:#0C0C0E;color:#FAFAFA">
+      <div class="theme-head"><h2>1. Obsidian Gold</h2><span class="tag" style="background:#D9A44122;color:#E7BE6A;border-color:#D9A44155">Current / Premium</span></div>
+      <div class="swatches">
+        <span class="sw"><span class="dot" style="background:#0C0C0E"></span>#0C0C0E</span>
+        <span class="sw"><span class="dot" style="background:#1E1E23"></span>#1E1E23</span>
+        <span class="sw"><span class="dot" style="background:#A1A1AB"></span>#A1A1AB</span>
+        <span class="sw"><span class="dot" style="background:#D9A441"></span>#D9A441</span>
+      </div>
+      <div class="mock" style="background:#131316">
+        <div class="nav" style="background:#0C0C0E;border-bottom:1px solid #2C2C33"><div class="brand"><div class="logo" style="background:#D9A441;color:#0C0C0E">BY</div>THE BIKE YARD</div><div class="navlinks"><span>Catalogue</span><span>Offers</span><span style="color:#D9A441">Test Ride</span></div></div>
+        <div class="hero" style="background:linear-gradient(120deg,#16161a,#2c2c33)"><div class="hero-inner"><div class="eyebrow" style="color:#D9A441">Authorised · Thane (MH-04)</div><h3>Ride Home <span style="color:#D9A441">Tonight.</span></h3><p style="color:#C9C9CF">Honda, Suzuki, TVS & more — transparent on-road pricing and 45-min finance.</p><div class="btns"><span class="btn" style="background:#D9A441;color:#0C0C0E">View On-Road Price</span><span class="btn ghost" style="color:#FAFAFA;border-color:#4B4B54">WhatsApp</span></div></div></div>
+        <div class="cards" style="background:#131316">
+          <div class="card" style="background:#16161a"><div class="bike"><div class="imgph" style="background:linear-gradient(135deg,#2c2c33,#4b4b54)">BIKE</div><div class="bmeta"><div class="m">TVS Raider 125</div><div class="s">124cc · Commuter Sport</div><div class="price" style="color:#D9A441">₹1,07,990 <small>ex-showroom</small></div></div></div></div>
+          <div class="card" style="background:#16161a"><div class="specs"><div class="spec" style="background:#0C0C0E"><span style="color:#A1A1AB">Power</span><b>11.38 PS</b></div><div class="spec" style="background:#0C0C0E"><span style="color:#A1A1AB">Mileage</span><b>67 kmpl</b></div><div class="spec" style="background:#0C0C0E"><span style="color:#A1A1AB">Stock</span><b style="color:#4ADE80">Ready</b></div><div class="spec" style="background:#D9A441;color:#0C0C0E"><span style="opacity:.8">EMI</span><b>₹2,499/mo</b></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 Racing Redline -->
+    <section class="theme" style="background:#09090B;color:#F8FAFC">
+      <div class="theme-head"><h2>2. Racing Redline</h2><span class="tag" style="background:#EF444422;color:#FCA5A5;border-color:#EF444455">Sport / Performance</span></div>
+      <div class="swatches">
+        <span class="sw"><span class="dot" style="background:#09090B"></span>#09090B</span>
+        <span class="sw"><span class="dot" style="background:#1C1C22"></span>#1C1C22</span>
+        <span class="sw"><span class="dot" style="background:#94A3B8"></span>#94A3B8</span>
+        <span class="sw"><span class="dot" style="background:#EF4444"></span>#EF4444</span>
+      </div>
+      <div class="mock" style="background:#121216">
+        <div class="nav" style="background:#09090B;border-bottom:1px solid #27272F"><div class="brand"><div class="logo" style="background:#EF4444;color:#fff">BY</div>THE BIKE YARD</div><div class="navlinks"><span>Catalogue</span><span>Offers</span><span style="color:#EF4444">Test Ride</span></div></div>
+        <div class="hero" style="background:linear-gradient(120deg,#121216,#2a1216 55%,#1c1c22)"><div class="hero-inner"><div class="eyebrow" style="color:#EF4444">Authorised · Thane (MH-04)</div><h3>Built to <span style="color:#EF4444">Perform.</span></h3><p style="color:#CBD5E1">Sport machines, streetfighters & commuters — priced transparently on-road.</p><div class="btns"><span class="btn" style="background:#EF4444;color:#fff">View On-Road Price</span><span class="btn ghost" style="color:#F8FAFC;border-color:#475569">WhatsApp</span></div></div></div>
+        <div class="cards" style="background:#121216">
+          <div class="card" style="background:#18181D"><div class="bike"><div class="imgph" style="background:linear-gradient(135deg,#27272f,#3f1717)">BIKE</div><div class="bmeta"><div class="m">TVS Raider 125</div><div class="s">124cc · Commuter Sport</div><div class="price" style="color:#EF4444">₹1,07,990 <small>ex-showroom</small></div></div></div></div>
+          <div class="card" style="background:#18181D"><div class="specs"><div class="spec" style="background:#09090B"><span style="color:#94A3B8">Power</span><b>11.38 PS</b></div><div class="spec" style="background:#09090B"><span style="color:#94A3B8">Mileage</span><b>67 kmpl</b></div><div class="spec" style="background:#09090B"><span style="color:#94A3B8">Stock</span><b style="color:#4ADE80">Ready</b></div><div class="spec" style="background:#EF4444;color:#fff"><span style="opacity:.85">EMI</span><b>₹2,499/mo</b></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 Heritage British Green -->
+    <section class="theme" style="background:#0B110D;color:#F4F5F0">
+      <div class="theme-head"><h2>3. Heritage British Green</h2><span class="tag" style="background:#C8A24A22;color:#E6C97A;border-color:#C8A24A55">Classic / Touring</span></div>
+      <div class="swatches">
+        <span class="sw"><span class="dot" style="background:#0B110D"></span>#0B110D</span>
+        <span class="sw"><span class="dot" style="background:#1A241E"></span>#1A241E</span>
+        <span class="sw"><span class="dot" style="background:#9FB3A6"></span>#9FB3A6</span>
+        <span class="sw"><span class="dot" style="background:#C8A24A"></span>#C8A24A</span>
+      </div>
+      <div class="mock" style="background:#121A15">
+        <div class="nav" style="background:#0B110D;border-bottom:1px solid #243329"><div class="brand"><div class="logo" style="background:#C8A24A;color:#0B110D">BY</div>THE BIKE YARD</div><div class="navlinks"><span>Catalogue</span><span>Offers</span><span style="color:#C8A24A">Test Ride</span></div></div>
+        <div class="hero" style="background:linear-gradient(120deg,#121A15,#1d2a22)"><div class="hero-inner"><div class="eyebrow" style="color:#C8A24A">Authorised · Thane (MH-04)</div><h3>Timeless Rides, <span style="color:#C8A24A">Honest Pricing.</span></h3><p style="color:#CFE0D6">Classics, commuters & tourers — with transparent MH-04 on-road quotes.</p><div class="btns"><span class="btn" style="background:#C8A24A;color:#0B110D">View On-Road Price</span><span class="btn ghost" style="color:#F4F5F0;border-color:#3E5547">WhatsApp</span></div></div></div>
+        <div class="cards" style="background:#121A15">
+          <div class="card" style="background:#172019"><div class="bike"><div class="imgph" style="background:linear-gradient(135deg,#243329,#355242)">BIKE</div><div class="bmeta"><div class="m">TVS Raider 125</div><div class="s">124cc · Commuter Sport</div><div class="price" style="color:#C8A24A">₹1,07,990 <small>ex-showroom</small></div></div></div></div>
+          <div class="card" style="background:#172019"><div class="specs"><div class="spec" style="background:#0B110D"><span style="color:#9FB3A6">Power</span><b>11.38 PS</b></div><div class="spec" style="background:#0B110D"><span style="color:#9FB3A6">Mileage</span><b>67 kmpl</b></div><div class="spec" style="background:#0B110D"><span style="color:#9FB3A6">Stock</span><b style="color:#4ADE80">Ready</b></div><div class="spec" style="background:#C8A24A;color:#0B110D"><span style="opacity:.8">EMI</span><b>₹2,499/mo</b></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 Electric Volt -->
+    <section class="theme" style="background:#070B14;color:#F8FAFF">
+      <div class="theme-head"><h2>4. Electric Volt</h2><span class="tag" style="background:#A3E63522;color:#BEF264;border-color:#A3E63555">Modern / EV-Ready</span></div>
+      <div class="swatches">
+        <span class="sw"><span class="dot" style="background:#070B14"></span>#070B14</span>
+        <span class="sw"><span class="dot" style="background:#162033"></span>#162033</span>
+        <span class="sw"><span class="dot" style="background:#9AA8C7"></span>#9AA8C7</span>
+        <span class="sw"><span class="dot" style="background:#A3E635"></span>#A3E635</span>
+      </div>
+      <div class="mock" style="background:#0E1525">
+        <div class="nav" style="background:#070B14;border-bottom:1px solid #1E2A42"><div class="brand"><div class="logo" style="background:#A3E635;color:#070B14">BY</div>THE BIKE YARD</div><div class="navlinks"><span>Catalogue</span><span>Offers</span><span style="color:#A3E635">Test Ride</span></div></div>
+        <div class="hero" style="background:linear-gradient(120deg,#0E1525,#14203b 50%,#101828)"><div class="hero-inner"><div class="eyebrow" style="color:#A3E635">Authorised · Thane (MH-04)</div><h3>The Future, <span style="color:#A3E635">On Two Wheels.</span></h3><p style="color:#C7D2FE">Next-gen scooters & bikes — smart finance, clear on-road pricing.</p><div class="btns"><span class="btn" style="background:#A3E635;color:#070B14">View On-Road Price</span><span class="btn ghost" style="color:#F8FAFF;border-color:#334155">WhatsApp</span></div></div></div>
+        <div class="cards" style="background:#0E1525">
+          <div class="card" style="background:#121C31"><div class="bike"><div class="imgph" style="background:linear-gradient(135deg,#1e2a42,#233a2a)">BIKE</div><div class="bmeta"><div class="m">TVS Raider 125</div><div class="s">124cc · Commuter Sport</div><div class="price" style="color:#A3E635">₹1,07,990 <small>ex-showroom</small></div></div></div></div>
+          <div class="card" style="background:#121C31"><div class="specs"><div class="spec" style="background:#070B14"><span style="color:#9AA8C7">Power</span><b>11.38 PS</b></div><div class="spec" style="background:#070B14"><span style="color:#9AA8C7">Mileage</span><b>67 kmpl</b></div><div class="spec" style="background:#070B14"><span style="color:#9AA8C7">Stock</span><b style="color:#4ADE80">Ready</b></div><div class="spec" style="background:#A3E635;color:#070B14"><span style="opacity:.8">EMI</span><b>₹2,499/mo</b></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 Showroom Daylight -->
+    <section class="theme" style="background:#F6F7F9;color:#111827;border-color:rgba(0,0,0,.08)">
+      <div class="theme-head"><h2>5. Showroom Daylight</h2><span class="tag" style="background:#2563EB18;color:#1D4ED8;border-color:#2563EB44">Light / High-Trust</span></div>
+      <div class="swatches" style="color:#374151">
+        <span class="sw"><span class="dot" style="background:#FFFFFF;border-color:#d1d5db"></span>#FFFFFF</span>
+        <span class="sw"><span class="dot" style="background:#ECEFF3;border-color:#d1d5db"></span>#ECEFF3</span>
+        <span class="sw"><span class="dot" style="background:#4B5563"></span>#4B5563</span>
+        <span class="sw"><span class="dot" style="background:#2563EB"></span>#2563EB</span>
+      </div>
+      <div class="mock" style="background:#FFFFFF;border-color:#e5e7eb">
+        <div class="nav" style="background:#FFFFFF;border-bottom:1px solid #E5E7EB;color:#111827"><div class="brand"><div class="logo" style="background:#2563EB;color:#fff">BY</div>THE BIKE YARD</div><div class="navlinks" style="color:#374151"><span>Catalogue</span><span>Offers</span><span style="color:#2563EB">Test Ride</span></div></div>
+        <div class="hero" style="background:linear-gradient(120deg,#F8FAFC,#E8F0FF)"><div class="hero-inner"><div class="eyebrow" style="color:#2563EB">Authorised · Thane (MH-04)</div><h3 style="color:#0F172A">Your Dealership, <span style="color:#2563EB">Crystal Clear.</span></h3><p style="color:#334155">Bright, clean and trustworthy — perfect for comparing bikes and prices.</p><div class="btns"><span class="btn" style="background:#2563EB;color:#fff">View On-Road Price</span><span class="btn ghost" style="color:#111827;border-color:#CBD5E1;background:#fff">WhatsApp</span></div></div></div>
+        <div class="cards" style="background:#FFFFFF">
+          <div class="card" style="background:#F8FAFC;border-color:#E5E7EB"><div class="bike"><div class="imgph" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e3a8a">BIKE</div><div class="bmeta"><div class="m" style="color:#111827">TVS Raider 125</div><div class="s" style="color:#4B5563">124cc · Commuter Sport</div><div class="price" style="color:#2563EB">₹1,07,990 <small>ex-showroom</small></div></div></div></div>
+          <div class="card" style="background:#F8FAFC;border-color:#E5E7EB"><div class="specs"><div class="spec" style="background:#FFFFFF;border:1px solid #E5E7EB"><span style="color:#6B7280">Power</span><b style="color:#111827">11.38 PS</b></div><div class="spec" style="background:#FFFFFF;border:1px solid #E5E7EB"><span style="color:#6B7280">Mileage</span><b style="color:#111827">67 kmpl</b></div><div class="spec" style="background:#FFFFFF;border:1px solid #E5E7EB"><span style="color:#6B7280">Stock</span><b style="color:#16A34A">Ready</b></div><div class="spec" style="background:#2563EB;color:#fff"><span style="opacity:.9">EMI</span><b>₹2,499/mo</b></div></div></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+</body>
+</html>

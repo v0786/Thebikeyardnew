@@ -1,0 +1,263 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Named palette tokens (overridden per [data-theme]) */
+  --color-obsidian: #0c0c0e;
+  --color-evergreen: #16161a;
+  --color-moss: #2c2c33;
+  --color-sage: #a1a1ab;
+  --color-sand: #f4f4f5;
+  --color-bronze: #d9a441;
+
+  /* Neutral scale (overridden per [data-theme]) */
+  --color-slate-950: #0c0c0e;
+  --color-slate-900: #131316;
+  --color-slate-800: #1e1e23;
+  --color-slate-700: #2c2c33;
+  --color-slate-600: #4b4b54;
+  --color-slate-500: #71717a;
+  --color-slate-400: #a1a1ab;
+  --color-slate-300: #c9c9cf;
+  --color-slate-200: #e4e4e7;
+  --color-slate-100: #fafafa;
+
+  /* Accent scale (overridden per [data-theme]) */
+  --color-amber-500: #d9a441;
+  --color-amber-400: #e7be6a;
+  --color-amber-300: #f3d9a0;
+  --color-amber-600: #a97b2a;
+}
+
+/* ---- Theme 1 (default): Obsidian Gold ---- */
+:root,
+[data-theme="obsidian-gold"] {
+  --bg-obsidian: #0c0c0e;
+  --surface-evergreen: #16161a;
+  --border-moss: #2c2c33;
+  --text-sage: #a1a1ab;
+  --text-sand: #f4f4f5;
+  --brand-bronze: #d9a441;
+  --scroll-track: #0c0c0e;
+  --scroll-thumb: #2c2c33;
+  --scroll-hover: #d9a441;
+  color-scheme: dark;
+}
+
+/* ---- Theme 2: Racing Redline ---- */
+[data-theme="racing-redline"] {
+  --color-obsidian: #09090b;
+  --color-evergreen: #121216;
+  --color-moss: #27272f;
+  --color-sage: #94a3b8;
+  --color-sand: #f8fafc;
+  --color-bronze: #ef4444;
+
+  --color-slate-950: #09090b;
+  --color-slate-900: #121216;
+  --color-slate-800: #1c1c22;
+  --color-slate-700: #27272f;
+  --color-slate-600: #475569;
+  --color-slate-500: #64748b;
+  --color-slate-400: #94a3b8;
+  --color-slate-300: #cbd5e1;
+  --color-slate-200: #e2e8f0;
+  --color-slate-100: #f8fafc;
+
+  --color-amber-500: #ef4444;
+  --color-amber-400: #f87171;
+  --color-amber-300: #fca5a5;
+  --color-amber-600: #dc2626;
+
+  --bg-obsidian: #09090b;
+  --surface-evergreen: #121216;
+  --border-moss: #27272f;
+  --text-sage: #94a3b8;
+  --text-sand: #f8fafc;
+  --brand-bronze: #ef4444;
+  --scroll-track: #09090b;
+  --scroll-thumb: #27272f;
+  --scroll-hover: #ef4444;
+  color-scheme: dark;
+}
+
+/* ---- Theme 3: Heritage British Green ---- */
+[data-theme="heritage-green"] {
+  --color-obsidian: #0b110d;
+  --color-evergreen: #121a15;
+  --color-moss: #243329;
+  --color-sage: #9fb3a6;
+  --color-sand: #f4f5f0;
+  --color-bronze: #c8a24a;
+
+  --color-slate-950: #0b110d;
+  --color-slate-900: #121a15;
+  --color-slate-800: #1a241e;
+  --color-slate-700: #243329;
+  --color-slate-600: #3e5547;
+  --color-slate-500: #5f7a6a;
+  --color-slate-400: #9fb3a6;
+  --color-slate-300: #c4d4ca;
+  --color-slate-200: #e1ebe4;
+  --color-slate-100: #f4f5f0;
+
+  --color-amber-500: #c8a24a;
+  --color-amber-400: #d8b86a;
+  --color-amber-300: #e6c97a;
+  --color-amber-600: #a88738;
+
+  --bg-obsidian: #0b110d;
+  --surface-evergreen: #121a15;
+  --border-moss: #243329;
+  --text-sage: #9fb3a6;
+  --text-sand: #f4f5f0;
+  --brand-bronze: #c8a24a;
+  --scroll-track: #0b110d;
+  --scroll-thumb: #243329;
+  --scroll-hover: #c8a24a;
+  color-scheme: dark;
+}
+
+/* ---- Theme 4: Electric Volt ---- */
+[data-theme="electric-volt"] {
+  --color-obsidian: #070b14;
+  --color-evergreen: #0e1525;
+  --color-moss: #1e2a42;
+  --color-sage: #9aa8c7;
+  --color-sand: #f8faff;
+  --color-bronze: #a3e635;
+
+  --color-slate-950: #070b14;
+  --color-slate-900: #0e1525;
+  --color-slate-800: #162033;
+  --color-slate-700: #1e2a42;
+  --color-slate-600: #334155;
+  --color-slate-500: #64748b;
+  --color-slate-400: #9aa8c7;
+  --color-slate-300: #c7d2fe;
+  --color-slate-200: #e0e7ff;
+  --color-slate-100: #f8faff;
+
+  --color-amber-500: #a3e635;
+  --color-amber-400: #bef264;
+  --color-amber-300: #d9f99d;
+  --color-amber-600: #65a30d;
+
+  --bg-obsidian: #070b14;
+  --surface-evergreen: #0e1525;
+  --border-moss: #1e2a42;
+  --text-sage: #9aa8c7;
+  --text-sand: #f8faff;
+  --brand-bronze: #a3e635;
+  --scroll-track: #070b14;
+  --scroll-thumb: #1e2a42;
+  --scroll-hover: #a3e635;
+  color-scheme: dark;
+}
+
+/* ---- Theme 5: Showroom Daylight (light) ---- */
+/* Slate scale inverted so dark-first utility classes render a light UI. */
+[data-theme="showroom-daylight"] {
+  --color-obsidian: #ffffff;
+  --color-evergreen: #f8fafc;
+  --color-moss: #e2e8f0;
+  --color-sage: #475569;
+  --color-sand: #0f172a;
+  --color-bronze: #2563eb;
+
+  --color-slate-950: #ffffff;
+  --color-slate-900: #f8fafc;
+  --color-slate-800: #f1f5f9;
+  --color-slate-700: #e2e8f0;
+  --color-slate-600: #cbd5e1;
+  --color-slate-500: #94a3b8;
+  --color-slate-400: #475569;
+  --color-slate-300: #334155;
+  --color-slate-200: #1e293b;
+  --color-slate-100: #0f172a;
+
+  --color-amber-500: #2563eb;
+  --color-amber-400: #3b82f6;
+  --color-amber-300: #60a5fa;
+  --color-amber-600: #1d4ed8;
+
+  --bg-obsidian: #ffffff;
+  --surface-evergreen: #f8fafc;
+  --border-moss: #e2e8f0;
+  --text-sage: #475569;
+  --text-sand: #0f172a;
+  --brand-bronze: #2563eb;
+  --scroll-track: #f1f5f9;
+  --scroll-thumb: #cbd5e1;
+  --scroll-hover: #2563eb;
+  color-scheme: light;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-slate-950);
+  color: var(--color-slate-200);
+}
+
+/* Display heading treatment for showroom hero & section headers */
+.display-heading {
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.eyebrow {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Themed subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scroll-track, #0c0c0e);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb, #2c2c33);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scroll-hover, #d9a441);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+  * {
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
