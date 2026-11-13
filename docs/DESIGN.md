@@ -506,3 +506,10 @@ Primary colour remains near-black in light mode and shifts to a dark slate in da
 **Verification:** DESIGN.md is complete and consistent with PRD.md. No product scope or business rules were changed from the PRD. No fake prices, reviews, or unverified claims are included. Assumptions are marked for owner confirmation.
 
 **Next:** Proceed to 03_ARCHITECTURE_PROMPT.md to generate ARCHITECTURE.md.
+## Interactive garage update — 13 November 2026
+
+The homepage hero now uses a racing-game vehicle selection layout: a lit centre platform, horizontal bike cards, exact-colour swatches, synchronized catalogue prices/specifications, detail links and the existing test-ride/EMI actions. Selection is shared with the existing page price bar and finance section. No booking, pricing or backend contracts change.
+
+Real 36-frame manufacturer turntables are available for Hunter 350 (Dapper Grey, Rebel Blue) and Himalayan 450 (Kamet White, Hanle Black, Kaza Brown). Drag or use arrow keys to rotate, optionally auto-rotate, zoom or reset. Animation never starts automatically. Other models/colours explicitly show Photo View; a single photograph is never presented as a 3D model. Turntable load failures fall back to the catalogue photo and offer retry. Reduced-motion preferences disable entrance transitions; mobile vertical scrolling remains available over the viewer.
+
+Media mapping and provenance: `src/data/showroom-media.ts`, `docs/SHOWROOM_MEDIA.md`. This is the existing Vite client preview; the separate backend and its production limitations remain as documented in README.

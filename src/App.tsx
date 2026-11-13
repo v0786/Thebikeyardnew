@@ -11,6 +11,7 @@ import { Footer } from './components/Footer';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { Seo } from './components/Seo';
 import { ShowroomHome } from './views/ShowroomHome';
+import { showroomColor } from './data/showroom-media';
 
 // Lazy-load staff/admin/legal surfaces & the bike detail route to keep the
 // public showroom bundle lean on mobile networks.
@@ -105,7 +106,12 @@ function ShowroomApp() {
   }, [currentUser]);
 
   // Vehicle Selection & Modal States
-  const [selectedBike, setSelectedBike] = useState<Motorcycle | null>(state.bikes[0] || null);
+  const [selectedBike, setSelectedBike] = useState<Motorcycle | null>(() => {
+    const bike = state.bikes.find((item) => !item.isUsed) ?? state.bikes[0];
+    if (!bike) return null;
+    const color = showroomColor(bike);
+    return { ...bike, selectedColor: color, image: bike.availableColors.find((item) => item.name === color)?.image ?? bike.image };
+  });
   const [detailBike, setDetailBike] = useState<Motorcycle | null>(null);
   const [openBookingForm, setOpenBookingForm] = useState(false);
   const [zoomBike, setZoomBike] = useState<Motorcycle | null>(null);

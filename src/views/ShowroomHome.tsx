@@ -1,7 +1,7 @@
 import { useState, type FC } from 'react';
 import { ChevronDown, ShieldCheck, Flame, Sparkles } from 'lucide-react';
 import type { Motorcycle } from '../types';
-import type { DealershipState } from '../services/dealershipStore';
+import { dealershipStore, type DealershipState } from '../services/dealershipStore';
 import type { UserProfile } from '../lib/rbac';
 import { FAQS } from '../data/dealershipData';
 import { Seo } from '../components/Seo';
@@ -98,6 +98,11 @@ export const ShowroomHome: FC<ShowroomHomeProps> = ({
       {/* Showroom Hero */}
       <ShowroomHero
         bikes={newBikes}
+        selectedBikeId={selectedBikeId}
+        onSelectBike={(bike) => {
+          if (bike.selectedColor) dealershipStore.selectBikeColor(bike.id, bike.selectedColor);
+          onSelectBike(bike);
+        }}
         inStockTotal={totalInStock}
         phone={info.phone}
         onExploreClick={() => scrollTo('catalogue-section')}
